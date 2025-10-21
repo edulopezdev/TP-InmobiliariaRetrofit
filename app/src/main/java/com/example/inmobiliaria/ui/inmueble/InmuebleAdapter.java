@@ -1,6 +1,8 @@
 package com.example.inmobiliaria.ui.inmueble;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.inmobiliaria.R;
 import com.example.inmobiliaria.models.Inmueble;
+import com.example.inmobiliaria.request.ApiClient;
 import com.squareup.picasso.Picasso;
 import android.util.Log;
 
@@ -44,10 +48,20 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHo
         holder.precio.setText(inmuebleActual.getValor() + " USD");
 
         Picasso.get()
-                .load("https://inmobiliariaulp-amb5hwfqaraweyga.canadacentral-01.azurewebsites.net" + inmuebleActual.getImagen())
+                .load(ApiClient.BASE_URL + inmuebleActual.getImagen())
                 .placeholder(R.drawable.loading)
                 .error(R.drawable.house)
                 .into(holder.foto);
+
+        ((ViewHolderInmueble) holder).itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("click", "onClick: " + inmuebleActual.getIdInmueble());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("inmueble", inmuebleActual);
+                Navigation.findNavController((Activity)context, R.id.nav_host_fragment_content_main).navigate(R.id.detalleInmueble, bundle);
+            }
+        });
     }
 
     @Override

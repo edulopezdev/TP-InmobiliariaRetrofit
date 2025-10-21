@@ -23,7 +23,7 @@ import retrofit2.http.PUT;
 
 public class ApiClient {
     // URL base de la API
-    private static String BASE_URL = "https://inmobiliariaulp-amb5hwfqaraweyga.canadacentral-01.azurewebsites.net/";
+    public final static String BASE_URL = "https://inmobiliariaulp-amb5hwfqaraweyga.canadacentral-01.azurewebsites.net/";
 
     // Método para crear el servicio de Retrofit con Gson
     public static InmoServicio getInmoServicio() {
@@ -50,6 +50,8 @@ public class ApiClient {
 
         @GET("api/Inmuebles")
         Call<List<Inmueble>> getListaInmuebles(@Header("Authorization") String token);  // Traer lista de inmuebles con token
+        @PUT("api/Inmuebles/actualizar")
+        Call<Inmueble> actualizarInmueble(@Header("Authorization") String token, @Body Inmueble inmueble);  // Actualizar inmueble
 
     }
 

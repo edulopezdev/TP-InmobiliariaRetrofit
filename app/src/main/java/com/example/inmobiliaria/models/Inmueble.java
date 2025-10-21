@@ -17,7 +17,8 @@ public class Inmueble implements Serializable {
     private int idPropietario;
     private Propietario propietario;
 
-    public Inmueble(int idInmueble) {
+    // Constructor vacío
+    public Inmueble() {
     }
 
     public Inmueble(int idInmueble, String direccion, String uso, String tipo, int ambientes, int superficie, double latitud, double valor, String imagen, boolean disponible, double longitud, int idPropietario, Propietario propietario) {

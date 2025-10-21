@@ -21,7 +21,11 @@
         android:id="@+id/nav_inmueble"
         android:name="com.example.inmobiliaria.ui.inmueble.InmuebleFragment"
         android:label="@string/inmueble"
-        tools:layout="@layout/fragment_inmueble" />
+        tools:layout="@layout/fragment_inmueble" >
+        <action
+            android:id="@+id/action_nav_inmueble_to_detalleInmueble"
+            app:destination="@id/detalleInmueble" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_inquilino"
@@ -40,4 +44,12 @@
         android:name="com.example.inmobiliaria.ui.logout.LogoutFragment"
         android:label="@string/logout"
         tools:layout="@layout/fragment_logout" />
+    <fragment
+        android:id="@+id/detalleInmueble"
+        android:name="com.example.inmobiliaria.ui.inmueble.DetalleInmueble"
+        android:label="DetalleInmueble" >
+        <action
+            android:id="@+id/action_detalleInmueble_to_nav_inmueble"
+            app:destination="@id/nav_inmueble" />
+    </fragment>
 </navigation>
