@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Obtenemos el NavController, que maneja la navegación entre fragmentos dentro del nav_host_fragment
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        binding.appBarMain.fab.setOnClickListener(v -> {navController.navigate(R.id.crearInmuebleFragment);});
 
         // Vinculamos la ActionBar con el NavController para que actualice el título y el botón de navegación
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);

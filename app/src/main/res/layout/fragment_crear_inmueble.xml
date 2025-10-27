@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            tools:context=".ui.inmueble.crear.CrearInmuebleFragment">
+
+            <!-- AMBIENTES -->
+            <TextView
+                android:id="@+id/tvAmbientes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Ambientes"
+                android:textColor="#555555"
+                android:textSize="13sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etAmbientes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ej: 3"
+                android:inputType="number"
+                android:background="@drawable/bg_edittext"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@id/tvAmbientes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- SUPERFICIE -->
+            <TextView
+                android:id="@+id/tvSuperficie"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Superficie (m²)"
+                android:textColor="#555555"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/etAmbientes"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etSuperficie"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ej: 120.5"
+                android:inputType="numberDecimal"
+                android:background="@drawable/bg_edittext"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@id/tvSuperficie"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- DIRECCIÓN -->
+            <TextView
+                android:id="@+id/tvDireccion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Dirección"
+                android:textColor="#555555"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/etSuperficie"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etDireccion"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ej: Calle 123"
+                android:inputType="text"
+                android:background="@drawable/bg_edittext"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@id/tvDireccion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- USO -->
+            <TextView
+                android:id="@+id/tvUso"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Uso"
+                android:textColor="#555555"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/etDireccion"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etUso"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Ej: Residencial"
+                android:inputType="text"
+                android:background="@drawable/bg_edittext"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintTop_toBottomOf="@id/tvUso"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- TIPO -->
+            <TextView
+                android:id="@+id/tvTipo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Tipo"
+                android:textColor="#555555"
+                android:textSize="13sp"
+                app:layout_constraintTop_toBottomOf="@id/etUso"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/etTipo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_edittext"
+                android:hint="Ej: Casa, Depto..."
+                android:inputType="text"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTipo" />
+
+            <!-- LATITUD / LONGITUD -->
+            <EditText
+                android:id="@+id/etLongitud"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="Longitud"
+                android:inputType="numberDecimal"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/etLatitud"
+                app:layout_constraintTop_toBottomOf="@+id/etTipo" />
+
+            <EditText
+                android:id="@+id/etLatitud"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="Latitud"
+                android:inputType="numberDecimal"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintEnd_toStartOf="@id/etLongitud"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/etTipo" />
+
+            <!-- VALOR -->
+            <TextView
+                android:id="@+id/tvValor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Valor (AR$)"
+                android:textColor="#555555"
+                android:textSize="13sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etLatitud" />
+
+            <EditText
+                android:id="@+id/etValor"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_edittext"
+                android:hint="Ej: 250000.00"
+                android:inputType="numberDecimal"
+                android:padding="6dp"
+                android:textColor="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvValor" />
+
+            <!-- Checkbox disponible -->
+            <CheckBox
+                android:id="@+id/cbDisponible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Disponible"
+                android:textColor="#555555"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etValor" />
+
+            <!-- Imagen del inmueble -->
+            <ImageView
+                android:id="@+id/ivPrevia"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_marginTop="16dp"
+                android:adjustViewBounds="true"
+                android:background="@drawable/bg_edittext"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toBottomOf="@id/cbDisponible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:src="@drawable/ic_launcher_background" />
+
+            <!-- Botón pequeño tipo clip para seleccionar imagen -->
+            <ImageButton
+                android:id="@+id/btnCargarImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Seleccionar imagen"
+                android:padding="6dp"
+                android:scaleType="centerInside"
+                app:tint="@color/teal_700"
+                app:layout_constraintTop_toBottomOf="@id/ivPrevia"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_clip" />
+
+            <!-- Botón Guardar -->
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_boton"
+                android:padding="10dp"
+                android:text="Guardar Inmueble"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnCargarImg" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
