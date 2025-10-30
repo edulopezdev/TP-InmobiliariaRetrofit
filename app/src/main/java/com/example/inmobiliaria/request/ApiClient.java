@@ -62,6 +62,9 @@ public class ApiClient {
         Call<Inmueble> CargarInmueble(@Header("Authorization") String token,
                                       @Part MultipartBody.Part imagen,
                                       @Part("inmueble") RequestBody inmuebleBody);
+
+        @GET("api/Inmuebles/GetContratoVigente")
+        Call<List<Inmueble>> getInmueblesConContratoVigente(@Header("Authorization") String token);
     }
 
     // Guardar token en SharedPreferences
