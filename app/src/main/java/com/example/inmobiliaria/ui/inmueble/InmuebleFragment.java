@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.inmobiliaria.databinding.FragmentInmuebleBinding;
 import com.example.inmobiliaria.models.Inmueble;
 import com.example.inmobiliaria.ui.perfil.PerfilViewModel;
+import com.example.inmobiliaria.R;
 
 import java.util.List;
 
@@ -36,7 +37,9 @@ public class InmuebleFragment extends Fragment {
         vm.getListaInmuebles().observe(getViewLifecycleOwner(), new Observer<List<Inmueble>>() {
             @Override
             public void onChanged(List<Inmueble> inmuebles) {
-                InmuebleAdapter adapter = new InmuebleAdapter(inmuebles,getContext(),getLayoutInflater());
+                InmuebleAdapter adapter = new InmuebleAdapter(
+                        inmuebles, getContext(), getLayoutInflater(), R.id.detalleInmueble
+                );
                 GridLayoutManager glm=new GridLayoutManager(getContext(),2,GridLayoutManager.VERTICAL,false);
                 binding.listaInmuebles.setLayoutManager(glm);
                 binding.listaInmuebles.setAdapter(adapter);

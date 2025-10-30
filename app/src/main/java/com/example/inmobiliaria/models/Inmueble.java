@@ -16,6 +16,13 @@ public class Inmueble implements Serializable {
     private double longitud;
     private int idPropietario;
     private Propietario propietario;
+    private Inquilino inquilino;
+
+    public Inquilino getInquilino() {
+        return inquilino;
+    }
+
+    public void setInquilino(Inquilino inquilino) { this.inquilino = inquilino; }
 
     // Constructor vacío
     public Inmueble() {

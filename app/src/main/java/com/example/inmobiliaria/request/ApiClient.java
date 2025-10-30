@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.example.inmobiliaria.models.Inmueble;
 import com.example.inmobiliaria.models.Propietario;
+import com.example.inmobiliaria.models.Contrato;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -65,6 +66,10 @@ public class ApiClient {
 
         @GET("api/Inmuebles/GetContratoVigente")
         Call<List<Inmueble>> getInmueblesConContratoVigente(@Header("Authorization") String token);
+
+        @GET("api/contratos/inmueble/{id}")
+        Call<Contrato> getContratoPorInmueble(@Header("Authorization") String token, @retrofit2.http.Path("id") int idInmueble);
+
     }
 
     // Guardar token en SharedPreferences

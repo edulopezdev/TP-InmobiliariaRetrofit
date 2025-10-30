@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,32 +14,34 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.example.inmobiliaria.databinding.FragmentInquilinoBinding;
 import com.example.inmobiliaria.models.Inmueble;
 import com.example.inmobiliaria.ui.inmueble.InmuebleAdapter;
+import com.example.inmobiliaria.R;
 
 import java.util.List;
 
 public class InquilinoFragment extends Fragment {
 
-    private InquilinoViewModel mViewModel;
     private FragmentInquilinoBinding binding;
+    private InquilinoViewModel vm;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        vm = new ViewModelProvider(this).get(InquilinoViewModel.class);
         binding = FragmentInquilinoBinding.inflate(inflater, container, false);
-        mViewModel = new ViewModelProvider(this).get(InquilinoViewModel.class);
+        View root = binding.getRoot();
 
-        mViewModel.getListaAlquilados().observe(getViewLifecycleOwner(), new Observer<List<Inmueble>>() {
+        vm.getListaAlquilados().observe(getViewLifecycleOwner(), new Observer<List<Inmueble>>() {
             @Override
             public void onChanged(List<Inmueble> inmuebles) {
-                InmuebleAdapter adapter = new InmuebleAdapter(inmuebles, getContext(), getLayoutInflater());
-                GridLayoutManager glm = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+                InmuebleAdapter adapter = new InmuebleAdapter(
+                        inmuebles, getContext(), getLayoutInflater(), R.id.detalleInquiniloFragment
+                );
+                GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
                 binding.listaInquilinos.setLayoutManager(glm);
                 binding.listaInquilinos.setAdapter(adapter);
             }
         });
-
-        mViewModel.obtenerInmueblesAlquilados();
-        return binding.getRoot();
+        vm.obtenerInmueblesAlquilados();
+        return root;
     }
 
     @Override

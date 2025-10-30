@@ -1,13 +1,182 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.inquilino.detalle.DetalleInquiniloFragment">
+    android:padding="16dp">
+
+    <!-- Título principal centrado -->
+    <TextView
+        android:id="@+id/tvTituloInquilino"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Información del inquilino"
+        android:textColor="#9C27B0"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- ID y Nombre en horizontal -->
+    <TextView
+        android:id="@+id/tvIdInquilinoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        android:textColor="#9C27B0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloInquilino"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvNombreInquilinoLabel"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="24dp"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:id="@+id/tvNombreInquilinoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Nombre"
+        android:textColor="#9C27B0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloInquilino"
+        app:layout_constraintStart_toEndOf="@id/tvIdInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="24dp"/>
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/etIdInquilino"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="#9C27B0"
+        app:layout_constraintTop_toBottomOf="@id/tvIdInquilinoLabel"
+        app:layout_constraintStart_toStartOf="@id/tvIdInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="@id/tvIdInquilinoLabel"
+        android:backgroundTint="#9C27B0"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/etNombreInquilino"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="#9C27B0"
+        app:layout_constraintTop_toBottomOf="@id/tvNombreInquilinoLabel"
+        app:layout_constraintStart_toStartOf="@id/tvNombreInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="@id/tvNombreInquilinoLabel"
+        android:backgroundTint="#9C27B0"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Apellido y DNI en horizontal -->
+    <TextView
+        android:id="@+id/tvApellidoInquilinoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Apellido"
+        android:textColor="#9C27B0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/etIdInquilino"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvDniInquilinoLabel"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="24dp"/>
+
+    <TextView
+        android:id="@+id/tvDniInquilinoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="DNI"
+        android:textColor="#9C27B0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/etNombreInquilino"
+        app:layout_constraintStart_toEndOf="@id/tvApellidoInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="24dp"/>
+
+    <EditText
+        android:id="@+id/etApellidoInquilino"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="#9C27B0"
+        app:layout_constraintTop_toBottomOf="@id/tvApellidoInquilinoLabel"
+        app:layout_constraintStart_toStartOf="@id/tvApellidoInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="@id/tvApellidoInquilinoLabel"
+        android:backgroundTint="#9C27B0"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/etDniInquilino"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="#9C27B0"
+        app:layout_constraintTop_toBottomOf="@id/tvDniInquilinoLabel"
+        app:layout_constraintStart_toStartOf="@id/tvDniInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="@id/tvDniInquilinoLabel"
+        android:backgroundTint="#9C27B0"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <!-- Teléfono y Email en horizontal -->
+    <TextView
+        android:id="@+id/tvTelefonoInquilinoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Teléfono"
+        android:textColor="#9C27B0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/etApellidoInquilino"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tvEmailInquilinoLabel"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="24dp"/>
+
+    <TextView
+        android:id="@+id/tvEmailInquilinoLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textColor="#9C27B0"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/etDniInquilino"
+        app:layout_constraintStart_toEndOf="@id/tvTelefonoInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_marginTop="24dp"/>
+
+    <EditText
+        android:id="@+id/etTelefonoInquilino"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="#9C27B0"
+        app:layout_constraintTop_toBottomOf="@id/tvTelefonoInquilinoLabel"
+        app:layout_constraintStart_toStartOf="@id/tvTelefonoInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="@id/tvTelefonoInquilinoLabel"
+        android:backgroundTint="#9C27B0"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <EditText
+        android:id="@+id/etEmailInquilino"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:textColor="#9C27B0"
+        app:layout_constraintTop_toBottomOf="@id/tvEmailInquilinoLabel"
+        app:layout_constraintStart_toStartOf="@id/tvEmailInquilinoLabel"
+        app:layout_constraintEnd_toEndOf="@id/tvEmailInquilinoLabel"
+        android:backgroundTint="#9C27B0"
+        android:padding="8dp"
+        android:layout_marginTop="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

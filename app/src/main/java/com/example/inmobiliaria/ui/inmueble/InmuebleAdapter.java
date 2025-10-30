@@ -27,11 +27,14 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHo
     private List<Inmueble> listaInmuebles;
     private Context context;
     private  LayoutInflater inflater;
+    private int destinoNav;
 
-    public InmuebleAdapter(List<Inmueble> inmuebles, Context context, LayoutInflater inflater) {
+
+    public InmuebleAdapter(List<Inmueble> inmuebles, Context context, LayoutInflater inflater, int destinoNav) {
         this.listaInmuebles = inmuebles;
         this.context = context;
         this.inflater = inflater;
+        this.destinoNav = destinoNav;
     }
 
     @NonNull
@@ -53,13 +56,19 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHo
                 .error(R.drawable.house)
                 .into(holder.foto);
 
-        ((ViewHolderInmueble) holder).itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("click", "onClick: " + inmuebleActual.getIdInmueble());
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("inmueble", inmuebleActual);
-                Navigation.findNavController((Activity)context, R.id.nav_host_fragment_content_main).navigate(R.id.detalleInmueble, bundle);
+                if (destinoNav == R.id.detalleInmueble) {
+                    // Para detalle de inmueble, pasa el objeto completo
+                    bundle.putSerializable("inmueble", inmuebleActual);
+                } else if (destinoNav == R.id.detalleInquiniloFragment) {
+                    // Para detalle de inquilino, solo el id
+                    bundle.putInt("idInmueble", inmuebleActual.getIdInmueble());
+                }
+                Navigation.findNavController((Activity) context, R.id.nav_host_fragment_content_main)
+                        .navigate(destinoNav, bundle);
             }
         });
     }
