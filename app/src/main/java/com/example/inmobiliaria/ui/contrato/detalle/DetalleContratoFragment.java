@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.inmobiliaria.databinding.FragmentDetalleContratoBinding;
 import com.example.inmobiliaria.models.Contrato;
+import com.example.inmobiliaria.R;
 
 public class DetalleContratoFragment extends Fragment {
 
@@ -44,6 +45,15 @@ public class DetalleContratoFragment extends Fragment {
                         binding.etDireccionInmueble.setText(contrato.getInmueble().getDireccion());
                     }
                 }
+            }
+        });
+
+        binding.btnPagos.setOnClickListener(v -> {
+            if (mViewModel.getContrato().getValue() != null) {
+                Bundle args = new Bundle();
+                args.putInt("idContrato", mViewModel.getContrato().getValue().getIdContrato());
+                androidx.navigation.fragment.NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_detalleContratoFragment_to_pagoFragment, args);
             }
         });
 

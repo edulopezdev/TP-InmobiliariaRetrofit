@@ -82,5 +82,22 @@
         android:id="@+id/detalleContratoFragment"
         android:name="com.example.inmobiliaria.ui.contrato.detalle.DetalleContratoFragment"
         android:label="Detalle Contrato"
-        tools:layout="@layout/fragment_detalle_contrato" />
+        tools:layout="@layout/fragment_detalle_contrato" >
+        <action
+            android:id="@+id/action_detalleContratoFragment_to_pagoFragment2"
+            app:destination="@id/pagoFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_detalleContratoFragment_to_pagoFragment"
+        app:destination="@id/pagoFragment" />
+
+    <fragment
+        android:id="@+id/pagoFragment"
+        android:name="com.example.inmobiliaria.ui.pago.PagoFragment"
+        android:label="Pagos"
+        tools:layout="@layout/fragment_pago">
+        <argument
+            android:name="idContrato"
+            app:argType="integer" />
+    </fragment>
 </navigation>
