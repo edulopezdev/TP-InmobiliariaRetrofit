@@ -44,7 +44,11 @@
         android:id="@+id/nav_contrato"
         android:name="com.example.inmobiliaria.ui.contrato.ContratoFragment"
         android:label="@string/contrato"
-        tools:layout="@layout/fragment_contrato" />
+        tools:layout="@layout/fragment_contrato" >
+        <action
+            android:id="@+id/action_nav_contrato_to_detalleContratoFragment"
+            app:destination="@id/detalleContratoFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_logout"
@@ -73,4 +77,10 @@
         android:name="com.example.inmobiliaria.ui.inquilino.detalle.DetalleInquiniloFragment"
         android:label="Detalle Inquilino"
         tools:layout="@layout/fragment_detalle_inquinilo" />
+
+    <fragment
+        android:id="@+id/detalleContratoFragment"
+        android:name="com.example.inmobiliaria.ui.contrato.detalle.DetalleContratoFragment"
+        android:label="Detalle Contrato"
+        tools:layout="@layout/fragment_detalle_contrato" />
 </navigation>

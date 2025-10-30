@@ -63,8 +63,8 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHo
                 if (destinoNav == R.id.detalleInmueble) {
                     // Para detalle de inmueble, pasa el objeto completo
                     bundle.putSerializable("inmueble", inmuebleActual);
-                } else if (destinoNav == R.id.detalleInquiniloFragment) {
-                    // Para detalle de inquilino, solo el id
+                } else if (destinoNav == R.id.detalleInquiniloFragment || destinoNav == R.id.detalleContratoFragment) {
+                    // Para detalle de inquilino o contrato, pasa el id del inmueble
                     bundle.putInt("idInmueble", inmuebleActual.getIdInmueble());
                 }
                 Navigation.findNavController((Activity) context, R.id.nav_host_fragment_content_main)
