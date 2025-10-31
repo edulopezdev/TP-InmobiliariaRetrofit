@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.inmobiliaria.models.Inmueble;
 import com.example.inmobiliaria.request.ApiClient;
@@ -36,105 +35,146 @@ public class CrearInmuebleViewModel extends AndroidViewModel {
     private MutableLiveData<Uri> uriMutableLiveData;
     private MutableLiveData<Inmueble> mInmueble;
     private static Inmueble inmueblelleno;
+
+    // LiveData para errores de validación
+    private MutableLiveData<String> error = new MutableLiveData<>();
+    public LiveData<String> getError() { return error; }
+
+    // LiveData para éxito en la creación
+    private MutableLiveData<Boolean> exito = new MutableLiveData<>();
+    public LiveData<Boolean> getExito() { return exito; }
+
     public CrearInmuebleViewModel(@NonNull Application application) {
         super(application);
         inmueblelleno = new Inmueble();
     }
+
     public LiveData<Uri> getUriMutable() {
         if (uriMutableLiveData == null) {
             uriMutableLiveData = new MutableLiveData<>();
         }
         return uriMutableLiveData;
     }
+
     public LiveData<Inmueble> getmInmueble() {
         if (mInmueble == null) {
             mInmueble = new MutableLiveData<>();
         }
         return mInmueble;
     }
+
     public void recibirFoto(ActivityResult result) {
         if (result.getResultCode() == RESULT_OK) {
             Intent data = result.getData();
             Uri uri = data.getData();
-            Log.d("salada", uri.toString());
             uriMutableLiveData.setValue(uri);
         }
     }
 
     public void guardarInmueble(String direccion, String uso, String tipo, String precio, String ambientes, String superficie, String latitud, String longitud, boolean disponible) {
+        // Validaciones de campos obligatorios y numéricos
+        if (direccion.isEmpty()) {
+            error.setValue("La dirección es obligatoria");
+            return;
+        }
+        if (uso.isEmpty()) {
+            error.setValue("El uso es obligatorio");
+            return;
+        }
+        if (tipo.isEmpty()) {
+            error.setValue("El tipo es obligatorio");
+            return;
+        }
+        int ambientesInt;
         try {
-            int ambientesInt = Integer.parseInt(ambientes);
-            double superficieDouble = Double.parseDouble(superficie);
-            double precioDouble = Double.parseDouble(precio);
-            Inmueble inmueble = new Inmueble();
-            inmueble.setDireccion(direccion);
-            inmueble.setUso(uso);
-            inmueble.setTipo(tipo);
-            inmueble.setValor(precioDouble);
-            inmueble.setAmbientes(ambientesInt);
-            inmueble.setSuperficie((int) superficieDouble);
-            inmueble.setDisponible(disponible);
-
-            //convertir la imagen en bits
-            byte[] imagen = transformarImagen();
-
-            //como me doy cuenta si el usuario habia elegido una imagen o no?
-            if (imagen.length == 0) {
-                Toast.makeText(getApplication(), "Error: Debe seleccionar una imagen para guardar el inmueble.", Toast.LENGTH_SHORT).show();
+            ambientesInt = Integer.parseInt(ambientes);
+            if (ambientesInt <= 0) {
+                error.setValue("Ingrese un número de ambientes válido");
                 return;
             }
-
-            // convertir la imagen a JSON
-            String inmuebleJson = new Gson().toJson(inmueble);
-            // crear el RequestBody para la imagen para enviarla al servidor
-            RequestBody inmuebleBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), inmuebleJson);
-            //ahora vamos a armar la imagen en otro RequestBody
-            RequestBody imagenBody = RequestBody.create(MediaType.parse("image/jpeg"), imagen);
-            // ahora armar el MultipartBody.Part para la imagen
-            MultipartBody.Part imagenPart = MultipartBody.Part.createFormData("imagen", "imagen.jpg", imagenBody);
-            // ahora avamos a invocar del ApiClient el metodo para guardar el inmueble
-            ApiClient.InmoServicio api = ApiClient.getInmoServicio();
-            // leer el token
-            String token = ApiClient.leerToken(getApplication());
-            // vamos a llamar al metodo guardarInmueble del ApiClient pasandole el token, el inmuebleBody y la imagenPart
-            Call<Inmueble> call = api.CargarInmueble("Bearer " + token, imagenPart, inmuebleBody);
-
-            //que nos falta? Faltarìa ejecutar la llamada asincronica con enqueue y manejar la respuesta
-            call.enqueue(new Callback<Inmueble>() {
-                @Override
-                public void onResponse(Call<Inmueble> call, Response<Inmueble> response) {
-                    if(response.isSuccessful()){
-                        Toast.makeText(getApplication(), "Inmueble creado correctamente (" + response.code() + ")", Toast.LENGTH_LONG).show();
-                    }else{
-                        Log.d("InmuebleVM", "error en la respuesta: " + response.code());
-                        Toast.makeText(getApplication(), "No se pudo actulizar el inmueble" + response.code(), Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Inmueble> call, Throwable t) {
-                    Log.d("errorActualizar", "Error: " + t.getMessage());
-                }
-            });
-
         } catch (NumberFormatException e) {
-            Toast.makeText(getApplication(), "Error: Formato numérico inválido.", Toast.LENGTH_SHORT).show();
+            error.setValue("Ingrese un número de ambientes válido");
+            return;
         }
+        int superficieInt;
+        try {
+            superficieInt = (int) Double.parseDouble(superficie);
+            if (superficieInt <= 0) {
+                error.setValue("Ingrese una superficie válida");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            error.setValue("Ingrese una superficie válida");
+            return;
+        }
+        double precioDouble;
+        try {
+            precioDouble = Double.parseDouble(precio);
+            if (precioDouble <= 0) {
+                error.setValue("Ingrese un valor válido");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            error.setValue("Ingrese un valor válido");
+            return;
+        }
+
+        // Validar imagen seleccionada
+        byte[] imagen = transformarImagen();
+        if (imagen.length == 0) {
+            error.setValue("Debe seleccionar una imagen para guardar el inmueble.");
+            return;
+        }
+
+        // Crear el objeto inmueble
+        Inmueble inmueble = new Inmueble();
+        inmueble.setDireccion(direccion);
+        inmueble.setUso(uso);
+        inmueble.setTipo(tipo);
+        inmueble.setValor(precioDouble);
+        inmueble.setAmbientes(ambientesInt);
+        inmueble.setSuperficie(superficieInt);
+        inmueble.setDisponible(disponible);
+
+        // Convertir inmueble a JSON
+        String inmuebleJson = new Gson().toJson(inmueble);
+        RequestBody inmuebleBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), inmuebleJson);
+        RequestBody imagenBody = RequestBody.create(MediaType.parse("image/jpeg"), imagen);
+        MultipartBody.Part imagenPart = MultipartBody.Part.createFormData("imagen", "imagen.jpg", imagenBody);
+
+        ApiClient.InmoServicio api = ApiClient.getInmoServicio();
+        String token = ApiClient.leerToken(getApplication());
+        Call<Inmueble> call = api.CargarInmueble("Bearer " + token, imagenPart, inmuebleBody);
+
+        call.enqueue(new Callback<Inmueble>() {
+            @Override
+            public void onResponse(Call<Inmueble> call, Response<Inmueble> response) {
+                if (response.isSuccessful()) {
+                    exito.postValue(true);
+                } else {
+                    error.setValue("No se pudo crear el inmueble (" + response.code() + ")");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Inmueble> call, Throwable t) {
+                error.setValue("Error: " + t.getMessage());
+            }
+        });
     }
+
     private byte[] transformarImagen() {
         try {
-            Uri uri = uriMutableLiveData.getValue(); // Obtener la URI de la imagen seleccionada
-            InputStream inputStream = getApplication().getContentResolver().openInputStream(uriMutableLiveData.getValue());
+            Uri uri = uriMutableLiveData != null ? uriMutableLiveData.getValue() : null;
+            if (uri == null) return new byte[]{};
+            InputStream inputStream = getApplication().getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
-
-        } catch ( FileNotFoundException e) {
-            Toast.makeText(getApplication(), "Error: Imagen no encontrada.", Toast.LENGTH_SHORT).show();
+        } catch (FileNotFoundException e) {
+            error.setValue("Error: Imagen no encontrada.");
             return new byte[]{};
         }
-
-
     }
 }

@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         // Establecemos la toolbar como la ActionBar de la actividad
         setSupportActionBar(binding.appBarMain.toolbar);
 
+
         // Configuramos el botón flotante (FAB) para mostrar un Snackbar cuando se clickea
         binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
             @Override

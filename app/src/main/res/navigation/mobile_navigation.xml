@@ -58,7 +58,7 @@
     <fragment
         android:id="@+id/detalleInmueble"
         android:name="com.example.inmobiliaria.ui.inmueble.DetalleInmueble"
-        android:label="DetalleInmueble" >
+        android:label="Detalle del Inmueble" >
         <action
             android:id="@+id/action_detalleInmueble_to_nav_inmueble"
             app:destination="@id/nav_inmueble" />
@@ -66,7 +66,7 @@
     <fragment
         android:id="@+id/crearInmuebleFragment"
         android:name="com.example.inmobiliaria.ui.inmueble.crear.CrearInmuebleFragment"
-        android:label="CrearInmuebleFragment" >
+        android:label="Crear un Inmueble" >
         <action
             android:id="@+id/action_crearInmuebleFragment_to_nav_inmueble"
             app:destination="@id/nav_inmueble" />
@@ -81,7 +81,7 @@
     <fragment
         android:id="@+id/detalleContratoFragment"
         android:name="com.example.inmobiliaria.ui.contrato.detalle.DetalleContratoFragment"
-        android:label="Detalle Contrato"
+        android:label="Detalle del Contrato"
         tools:layout="@layout/fragment_detalle_contrato" >
         <action
             android:id="@+id/action_detalleContratoFragment_to_pagoFragment2"
@@ -94,10 +94,19 @@
     <fragment
         android:id="@+id/pagoFragment"
         android:name="com.example.inmobiliaria.ui.pago.PagoFragment"
-        android:label="Pagos"
+        android:label="Pagos del Contrato"
         tools:layout="@layout/fragment_pago">
         <argument
             android:name="idContrato"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/cambiarContrasenaFragment"
+        android:name="com.example.inmobiliaria.ui.contrasena.CambiarContrasenaFragment"
+        android:label="Cambiar Contraseña"
+        tools:layout="@layout/fragment_cambiar_contrasena" />
+    <action
+        android:id="@+id/action_nav_perfil_to_cambiarContrasenaFragment"
+        app:destination="@id/cambiarContrasenaFragment" />
+
 </navigation>

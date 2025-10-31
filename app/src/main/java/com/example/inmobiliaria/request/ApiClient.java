@@ -2,6 +2,7 @@ package com.example.inmobiliaria.request;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import com.example.inmobiliaria.models.Pago;
 
 import com.example.inmobiliaria.models.Inmueble;
@@ -56,6 +57,7 @@ public class ApiClient {
 
         @GET("api/Inmuebles")
         Call<List<Inmueble>> getListaInmuebles(@Header("Authorization") String token);  // Traer lista de inmuebles con token
+
         @PUT("api/Inmuebles/actualizar")
         Call<Inmueble> actualizarInmueble(@Header("Authorization") String token, @Body Inmueble inmueble);  // Actualizar inmueble
 
@@ -73,6 +75,10 @@ public class ApiClient {
 
         @GET("api/pagos/contrato/{id}")
         Call<List<Pago>> getPagosPorContrato(@Header("Authorization") String token, @retrofit2.http.Path("id") int idContrato);
+
+        @FormUrlEncoded
+        @PUT("api/Propietarios/changePassword") Call<Void> cambiarPassword(@Header("Authorization") String token,@Field("currentPassword") String actual, @Field("newPassword") String nueva);
+
     }
 
     // Guardar token en SharedPreferences

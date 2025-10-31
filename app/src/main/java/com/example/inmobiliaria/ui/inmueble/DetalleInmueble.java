@@ -19,6 +19,9 @@ import com.example.inmobiliaria.models.Inmueble;
 import com.example.inmobiliaria.request.ApiClient;
 import com.squareup.picasso.Picasso;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class DetalleInmueble extends Fragment {
 
     private DetalleInmuebleViewModel mViewModel;
@@ -42,10 +45,15 @@ public class DetalleInmueble extends Fragment {
             public void onChanged(Inmueble inmuebleRecibido) {
                 inmueble = inmuebleRecibido; // Asignar el inmueble recibido a la variable de instancia
                 binding.etCodigo.setText(String.valueOf(inmueble.getIdInmueble()));
-                binding.tvDireccion.setText(inmueble.getDireccion());
+                binding.etDireccion.setText(inmueble.getDireccion());
                 binding.etUso.setText(inmueble.getUso());
-                binding.tvAmbientes.setText(String.valueOf(inmueble.getAmbientes()));
-                binding.etPrecio.setText(String.valueOf(inmueble.getValor()));
+                binding.etAmbientes.setText(String.valueOf(inmueble.getAmbientes()));
+                // Formatear el valor como moneda argentina
+                NumberFormat nf = NumberFormat.getInstance(new Locale("es", "AR"));
+                nf.setMinimumFractionDigits(2);
+                nf.setMaximumFractionDigits(2);
+                String valorFormateado = nf.format(inmueble.getValor());
+                binding.etPrecio.setText("$ " + valorFormateado);
                 binding.etTipo.setText(inmueble.getTipo());
                 binding.cbDisponible.setChecked(inmueble.isDisponible());
                 Picasso.get()

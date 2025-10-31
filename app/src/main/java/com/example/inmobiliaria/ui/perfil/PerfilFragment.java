@@ -59,6 +59,11 @@ public class PerfilFragment extends Fragment {
             }
         });
 
+        binding.btnCambiarPassword.setOnClickListener(v -> {
+            androidx.navigation.fragment.NavHostFragment.findNavController(this)
+                    .navigate(R.id.action_nav_perfil_to_cambiarContrasenaFragment);
+        });
+
         //mutable del propietario
         perfilViewModel.getMutablePropietario().observe(getViewLifecycleOwner(), new Observer<com.example.inmobiliaria.models.Propietario>() {
 

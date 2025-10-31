@@ -17,19 +17,19 @@ import com.example.inmobiliaria.R;
 import com.example.inmobiliaria.models.Inmueble;
 import com.example.inmobiliaria.request.ApiClient;
 import com.squareup.picasso.Picasso;
-import android.util.Log;
 
-
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHolderInmueble> {
 
     private List<Inmueble> listaInmuebles;
     private Context context;
-    private  LayoutInflater inflater;
+    private LayoutInflater inflater;
     private int destinoNav;
 
-
+    // Constructor que recibe la lista, el contexto, el inflater y el destino de navegación
     public InmuebleAdapter(List<Inmueble> inmuebles, Context context, LayoutInflater inflater, int destinoNav) {
         this.listaInmuebles = inmuebles;
         this.context = context;
@@ -48,7 +48,11 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolderInmueble holder, int position) {
         Inmueble inmuebleActual = listaInmuebles.get(position);
         holder.direccion.setText(inmuebleActual.getDireccion());
-        holder.precio.setText(inmuebleActual.getValor() + " USD");
+
+        // Formatea el valor en formato argentino (punto miles, coma decimales)
+        NumberFormat nf = NumberFormat.getInstance(new Locale("es", "AR"));
+        String valorFormateado = nf.format(inmuebleActual.getValor());
+        holder.precio.setText("$ " + valorFormateado);
 
         Picasso.get()
                 .load(ApiClient.BASE_URL + inmuebleActual.getImagen())
@@ -78,6 +82,7 @@ public class InmuebleAdapter extends RecyclerView.Adapter<InmuebleAdapter.ViewHo
         return listaInmuebles.size();
     }
 
+    // ViewHolder para los elementos de la lista
     public static class ViewHolderInmueble extends RecyclerView.ViewHolder {
         TextView direccion, superficie, precio;
         ImageView foto;
