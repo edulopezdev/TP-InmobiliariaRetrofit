@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
@@ -32,47 +30,35 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class CrearInmuebleViewModel extends AndroidViewModel {
-    private MutableLiveData<Uri> uriMutableLiveData;
-    private MutableLiveData<Inmueble> mInmueble;
-    private static Inmueble inmueblelleno;
-
-    // LiveData para errores de validación
+    private MutableLiveData<Uri> uriMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<String> error = new MutableLiveData<>();
-    public LiveData<String> getError() { return error; }
-
-    // LiveData para éxito en la creación
     private MutableLiveData<Boolean> exito = new MutableLiveData<>();
-    public LiveData<Boolean> getExito() { return exito; }
 
     public CrearInmuebleViewModel(@NonNull Application application) {
         super(application);
-        inmueblelleno = new Inmueble();
     }
 
     public LiveData<Uri> getUriMutable() {
-        if (uriMutableLiveData == null) {
-            uriMutableLiveData = new MutableLiveData<>();
-        }
         return uriMutableLiveData;
     }
 
-    public LiveData<Inmueble> getmInmueble() {
-        if (mInmueble == null) {
-            mInmueble = new MutableLiveData<>();
-        }
-        return mInmueble;
+    public LiveData<String> getError() {
+        return error;
+    }
+
+    public LiveData<Boolean> getExito() {
+        return exito;
     }
 
     public void recibirFoto(ActivityResult result) {
-        if (result.getResultCode() == RESULT_OK) {
-            Intent data = result.getData();
-            Uri uri = data.getData();
+        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+            Uri uri = result.getData().getData();
             uriMutableLiveData.setValue(uri);
         }
     }
 
     public void guardarInmueble(String direccion, String uso, String tipo, String precio, String ambientes, String superficie, String latitud, String longitud, boolean disponible) {
-        // Validaciones de campos obligatorios y numéricos
+        // Validaciones
         if (direccion.isEmpty()) {
             error.setValue("La dirección es obligatoria");
             return;
@@ -118,15 +104,27 @@ public class CrearInmuebleViewModel extends AndroidViewModel {
             error.setValue("Ingrese un valor válido");
             return;
         }
+        double latitudDouble;
+        try {
+            latitudDouble = Double.parseDouble(latitud);
+        } catch (NumberFormatException e) {
+            error.setValue("Ingrese una latitud válida");
+            return;
+        }
+        double longitudDouble;
+        try {
+            longitudDouble = Double.parseDouble(longitud);
+        } catch (NumberFormatException e) {
+            error.setValue("Ingrese una longitud válida");
+            return;
+        }
 
-        // Validar imagen seleccionada
         byte[] imagen = transformarImagen();
         if (imagen.length == 0) {
             error.setValue("Debe seleccionar una imagen para guardar el inmueble.");
             return;
         }
 
-        // Crear el objeto inmueble
         Inmueble inmueble = new Inmueble();
         inmueble.setDireccion(direccion);
         inmueble.setUso(uso);
@@ -134,9 +132,10 @@ public class CrearInmuebleViewModel extends AndroidViewModel {
         inmueble.setValor(precioDouble);
         inmueble.setAmbientes(ambientesInt);
         inmueble.setSuperficie(superficieInt);
+        inmueble.setLatitud(latitudDouble);
+        inmueble.setLongitud(longitudDouble);
         inmueble.setDisponible(disponible);
 
-        // Convertir inmueble a JSON
         String inmuebleJson = new Gson().toJson(inmueble);
         RequestBody inmuebleBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), inmuebleJson);
         RequestBody imagenBody = RequestBody.create(MediaType.parse("image/jpeg"), imagen);
@@ -165,14 +164,14 @@ public class CrearInmuebleViewModel extends AndroidViewModel {
 
     private byte[] transformarImagen() {
         try {
-            Uri uri = uriMutableLiveData != null ? uriMutableLiveData.getValue() : null;
+            Uri uri = uriMutableLiveData.getValue();
             if (uri == null) return new byte[]{};
             InputStream inputStream = getApplication().getContentResolver().openInputStream(uri);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             return byteArrayOutputStream.toByteArray();
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             error.setValue("Error: Imagen no encontrada.");
             return new byte[]{};
         }

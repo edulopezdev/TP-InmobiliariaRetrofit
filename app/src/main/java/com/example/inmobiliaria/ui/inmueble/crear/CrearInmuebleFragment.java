@@ -31,10 +31,6 @@ public class CrearInmuebleFragment extends Fragment {
     private Intent intent;
     private ActivityResultLauncher<Intent> arl;
 
-    public static CrearInmuebleFragment newInstance() {
-        return new CrearInmuebleFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
@@ -44,35 +40,20 @@ public class CrearInmuebleFragment extends Fragment {
 
         abrirGaleria();
 
-        binding.btnCargarImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                arl.launch(intent);
-            }
+        binding.btnCargarImg.setOnClickListener(v -> arl.launch(intent));
+
+        binding.btnGuardar.setOnClickListener(v -> agregarInmueble());
+
+        mv.getUriMutable().observe(getViewLifecycleOwner(), uri -> {
+            binding.ivPrevia.setImageURI(uri);
         });
 
-        binding.btnGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                agregarInmueble();
-            }
-        });
-
-        mv.getUriMutable().observe(getViewLifecycleOwner(), new Observer<Uri>() {
-            @Override
-            public void onChanged(Uri uri) {
-                binding.ivPrevia.setImageURI(uri);
-            }
-        });
-
-        // Observa errores del ViewModel y los muestra como Toast
         mv.getError().observe(getViewLifecycleOwner(), err -> {
             if (err != null && !err.isEmpty()) {
                 Toast.makeText(getContext(), err, Toast.LENGTH_SHORT).show();
             }
         });
 
-        // Observa el éxito y navega a la lista de inmuebles
         mv.getExito().observe(getViewLifecycleOwner(), exito -> {
             if (exito != null && exito) {
                 Toast.makeText(getContext(), "Inmueble creado correctamente", Toast.LENGTH_SHORT).show();
@@ -85,16 +66,12 @@ public class CrearInmuebleFragment extends Fragment {
 
     private void abrirGaleria() {
         intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        arl = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-            @Override
-            public void onActivityResult(ActivityResult result) {
-                mv.recibirFoto(result);
-            }
+        arl = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            mv.recibirFoto(result);
         });
     }
 
     private void agregarInmueble() {
-        // Obtiene los valores de los campos
         String direccion = binding.etDireccion.getText().toString().trim();
         String uso = binding.etUso.getText().toString().trim();
         String tipo = binding.etTipo.getText().toString().trim();
@@ -105,7 +82,6 @@ public class CrearInmuebleFragment extends Fragment {
         String longitud = binding.etLongitud.getText().toString().trim();
         boolean disponible = binding.cbDisponible.isChecked();
 
-        // Llama al ViewModel para validar y guardar
         mv.guardarInmueble(direccion, uso, tipo, precio, ambientes, superficie, latitud, longitud, disponible);
     }
 
