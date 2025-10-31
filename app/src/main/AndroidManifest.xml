@@ -35,6 +35,12 @@
             android:exported="false"
             android:theme="@style/Theme.Inmo.NoActionBar"
             android:label="@string/app_name" />
-    </application>
 
+        <!-- Mueve esta activity DENTRO de <application> -->
+        <activity
+            android:name=".ui.contrasena.resetear.ResetearContrasenaActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Inmo" />
+
+    </application>
 </manifest>

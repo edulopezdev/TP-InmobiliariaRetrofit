@@ -79,6 +79,9 @@ public class ApiClient {
         @FormUrlEncoded
         @PUT("api/Propietarios/changePassword") Call<Void> cambiarPassword(@Header("Authorization") String token,@Field("currentPassword") String actual, @Field("newPassword") String nueva);
 
+        @FormUrlEncoded
+        @POST("api/Propietarios/email")
+        Call<String> resetearContrasena(@Field("email") String email);
     }
 
     // Guardar token en SharedPreferences

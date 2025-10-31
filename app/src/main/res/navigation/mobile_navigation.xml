@@ -109,4 +109,19 @@
         android:id="@+id/action_nav_perfil_to_cambiarContrasenaFragment"
         app:destination="@id/cambiarContrasenaFragment" />
 
+    <fragment
+        android:id="@+id/resetearContrasenaFragment"
+        android:name="com.example.inmobiliaria.ui.contrasena.resetear.ResetearContrasenaFragment"
+        android:label="Resetear Contraseña"
+        tools:layout="@layout/fragment_resetear_contrasena" >
+        <action
+            android:id="@+id/action_resetearContrasenaFragment_to_loginActivity"
+            app:destination="@id/loginActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.example.inmobiliaria.ui.login.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+
 </navigation>

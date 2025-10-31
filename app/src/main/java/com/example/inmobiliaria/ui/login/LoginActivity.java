@@ -1,5 +1,7 @@
 package com.example.inmobiliaria.ui.login;
 
+import android.content.Intent;
+
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -34,5 +36,10 @@ public class LoginActivity extends AppCompatActivity {
             String password = binding.etPassword.getText().toString();
             viewModel.login(email, password);
         });
+        binding.tvForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, com.example.inmobiliaria.ui.contrasena.resetear.ResetearContrasenaActivity.class);
+            startActivity(intent);
+        });
     }
+
 }
