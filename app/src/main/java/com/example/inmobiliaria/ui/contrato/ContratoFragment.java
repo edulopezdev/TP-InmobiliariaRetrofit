@@ -9,11 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.navigation.Navigation;
 
+import com.example.inmobiliaria.R;
 import com.example.inmobiliaria.databinding.FragmentContratoBinding;
 import com.example.inmobiliaria.models.Inmueble;
 import com.example.inmobiliaria.ui.inmueble.InmuebleAdapter;
-import com.example.inmobiliaria.R;
 
 import java.util.List;
 
@@ -28,11 +29,15 @@ public class ContratoFragment extends Fragment {
         binding = FragmentContratoBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        vm.getListaContratos().observe(getViewLifecycleOwner(), inmuebles -> {
-            InmuebleAdapter adapter = new InmuebleAdapter(
-                    inmuebles, getContext(), getLayoutInflater(), R.id.detalleContratoFragment
-            );
-            GridLayoutManager glm = new GridLayoutManager(getContext(), 2);
+        vm.getListaContratos().observe(getViewLifecycleOwner(), (List<Inmueble> inmuebles) -> {
+            InmuebleAdapter adapter = new InmuebleAdapter(inmuebles, getLayoutInflater(), inmueble -> {
+                Bundle bundle = new Bundle();
+                // Enviar el id que espera DetalleContratoViewModel
+                bundle.putInt("idInmueble", inmueble.getIdInmueble());
+                Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main)
+                        .navigate(R.id.detalleContratoFragment, bundle);
+            });
+            GridLayoutManager glm = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
             binding.listaContratos.setLayoutManager(glm);
             binding.listaContratos.setAdapter(adapter);
         });

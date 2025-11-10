@@ -1,6 +1,7 @@
 package com.example.inmobiliaria.ui.perfil;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -9,98 +10,131 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.inmobiliaria.R;
+import com.example.inmobiliaria.databinding.FragmentPerfilBinding;
 import com.example.inmobiliaria.models.Propietario;
 import com.example.inmobiliaria.request.ApiClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PerfilViewModel extends AndroidViewModel {
 
-    private MutableLiveData<Propietario> propietarioMutable;
-    private MutableLiveData<Boolean> mutableEstado = new MutableLiveData<>(false);
-    private MutableLiveData<String> mutableTextoBoton = new MutableLiveData<>("Editar");
+    private final MutableLiveData<Propietario> propietario = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> editable = new MutableLiveData<>(false);
+    private final MutableLiveData<String> textoBoton = new MutableLiveData<>("Editar");
+    private final MutableLiveData<String> mensaje = new MutableLiveData<>();
+
     public PerfilViewModel(@NonNull Application application) {
         super(application);
     }
 
-    public LiveData<Boolean> getMutableEstado() {
-        return mutableEstado;
-    }
-    public LiveData<String> getMutableTextoBoton() {
-        return mutableTextoBoton;
-    }
+    // getters LiveData
+    public LiveData<Propietario> getPropietario() { return propietario; }
+    public LiveData<Boolean> getEditable() { return editable; }
+    public LiveData<String> getTextoBoton() { return textoBoton; }
+    public LiveData<String> getMensaje() { return mensaje; }
 
-    public LiveData<Propietario> getMutablePropietario() {
-        if(propietarioMutable == null){
-            propietarioMutable = new MutableLiveData<>();
+    // estos son llamados desde el Fragment
+    public void onBotonPerfilClick(String nombre, String apellido, String dni, String telefono, String email) {
+        if (Boolean.FALSE.equals(editable.getValue())) {
+            editable.setValue(true);
+            textoBoton.setValue("Guardar");
+        } else {
+            guardarCambios(nombre, apellido, dni, telefono, email);
         }
-        return propietarioMutable;
     }
 
-    public void getPerfil(){
+    public void aplicarEstilos(FragmentPerfilBinding binding, boolean editable) {
+        int estilo = editable ? R.style.EditableTextStyle : R.style.ReadOnlyEditTextStyle;
+        int color = getApplication().getResources().getColor(
+                editable ? android.R.color.black : android.R.color.darker_gray
+        );
+
+        //aca lo q hacemos es setear los estilos a los edittext dependiendo si estan en modo editable o no
+        binding.etNombre.setEnabled(editable);
+        binding.etApellido.setEnabled(editable);
+        binding.etDni.setEnabled(editable);
+        binding.etTelefono.setEnabled(editable);
+        binding.etEmail.setEnabled(editable);
+
+        binding.etNombre.setTextAppearance(estilo);
+        binding.etApellido.setTextAppearance(estilo);
+        binding.etDni.setTextAppearance(estilo);
+        binding.etTelefono.setTextAppearance(estilo);
+        binding.etEmail.setTextAppearance(estilo);
+
+        binding.etNombre.setTextColor(color);
+        binding.etApellido.setTextColor(color);
+        binding.etDni.setTextColor(color);
+        binding.etTelefono.setTextColor(color);
+        binding.etEmail.setTextColor(color);
+    }
+
+    public void mostrarToast(Context context, String msg) {
+        if (msg == null || msg.isEmpty()) return;
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
+        mensaje.setValue(null);
+    }
+
+    // llamados a la API
+    public void cargarPerfil() {
         String token = ApiClient.leerToken(getApplication());
         ApiClient.InmoServicio servicio = ApiClient.getInmoServicio();
-        Call<Propietario> propietario = servicio.getPropietario("Bearer " + token);
-
-        propietario.enqueue(new retrofit2.Callback<Propietario>() {
+        servicio.getPropietario("Bearer " + token).enqueue(new Callback<Propietario>() {
             @Override
-            public void onResponse(Call<Propietario> call, retrofit2.Response<Propietario> response) {
-                if(response.isSuccessful()){
-                    propietarioMutable.postValue(response.body());
-                }else{
-                    Log.d("PerfilViewModel", "Error al obtener el perfil: " + response.code());
-                    Toast.makeText(getApplication(), "Error al obtener el perfil", Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<Propietario> call, Response<Propietario> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    propietario.postValue(response.body());
+                } else {
+                    Log.e("PerfilVM", "Error al obtener perfil: " + response.code());
+                    mensaje.postValue("Error al obtener el perfil");
                 }
             }
 
             @Override
             public void onFailure(Call<Propietario> call, Throwable t) {
-                Log.e("PerfilViewModel", "Error de red al obtener perfil: " + t.getMessage());
-                Toast.makeText(getApplication(), "Error de conexión. Intenta nuevamente.", Toast.LENGTH_LONG).show();
+                Log.e("PerfilVM", "Fallo red: " + t.getMessage());
+                mensaje.postValue("Error de conexión");
             }
         });
-
     }
 
-    public void cambiarBoton(String textoBoton, String nombre, String apellido, String dni, String telefono, String email){
-        if( textoBoton.equals("Editar")) {
-            mutableEstado.setValue(true);
-            mutableTextoBoton.setValue("Guardar");
-        } else {
-            mutableEstado.setValue(false);
-            mutableTextoBoton.setValue("Editar");
-            Propietario nuevo = new Propietario();
-            nuevo.setIdPropietario(propietarioMutable.getValue().getIdPropietario());
-            nuevo.setNombre(nombre);
-            nuevo.setApellido(apellido);
-            nuevo.setDni(dni);
-            nuevo.setTelefono(telefono);
-            nuevo.setEmail(email);
-
-            String token = ApiClient.leerToken(getApplication());
-            ApiClient.InmoServicio servicio = ApiClient.getInmoServicio();
-            Call<Propietario> propietarioCreado = servicio.editPropietario("Bearer " + token, nuevo);
-            propietarioCreado.enqueue(new Callback<Propietario>() {
-                @Override
-                public void onResponse(Call<Propietario> call, retrofit2.Response<Propietario> response) {
-                    if (response.isSuccessful()) {
-                        propietarioMutable.postValue(response.body());
-                        Toast.makeText(getApplication(), "Perfil actualizado", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.d("PerfilViewModel", "Error al actualizar el perfil: " + response.code());
-                        Toast.makeText(getApplication(), "Error al actualizar el perfil", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                @Override
-                public void onFailure(Call<Propietario> call, Throwable t) {
-                    Log.d("PerfilViewModel", "onFailure: " + t.getMessage());
-                    Toast.makeText(getApplication(), "Error de red al actualizar el perfil, posible error de Api", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
+    private void guardarCambios(String nombre, String apellido, String dni, String telefono, String email) {
+        Propietario actual = propietario.getValue();
+        if (actual == null) {
+            mensaje.postValue("No hay perfil cargado para actualizar");
+            return;
         }
 
+        Propietario nuevo = new Propietario(
+                actual.getIdPropietario(), nombre, apellido, dni, telefono, email,
+                actual.getClave() // si no se cambia la clave, se mantiene la misma
+        );
+
+        String token = ApiClient.leerToken(getApplication());
+        ApiClient.InmoServicio servicio = ApiClient.getInmoServicio();
+        servicio.editPropietario("Bearer " + token, nuevo).enqueue(new Callback<Propietario>() {
+            @Override
+            public void onResponse(Call<Propietario> call, Response<Propietario> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    propietario.postValue(response.body());
+                    mensaje.postValue("Perfil actualizado");
+                } else {
+                    mensaje.postValue("Error al actualizar el perfil");
+                }
+                editable.postValue(false);
+                textoBoton.postValue("Editar");
+            }
+
+            @Override
+            public void onFailure(Call<Propietario> call, Throwable t) {
+                Log.e("PerfilVM", "Error: " + t.getMessage());
+                mensaje.postValue("Error de red al actualizar");
+                editable.postValue(false);
+                textoBoton.postValue("Editar");
+            }
+        });
     }
 }

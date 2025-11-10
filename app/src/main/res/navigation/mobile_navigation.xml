@@ -74,9 +74,9 @@
 
     <fragment
         android:id="@+id/detalleInquiniloFragment"
-        android:name="com.example.inmobiliaria.ui.inquilino.detalle.DetalleInquiniloFragment"
+        android:name="com.example.inmobiliaria.ui.inquilino.detalle.DetalleInquilinoFragment"
         android:label="Detalle Inquilino"
-        tools:layout="@layout/fragment_detalle_inquinilo" />
+        tools:layout="@layout/fragment_detalle_inquilino" />
 
     <fragment
         android:id="@+id/detalleContratoFragment"
